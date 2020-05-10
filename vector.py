@@ -33,10 +33,26 @@ class Vector(object):
         else:
             raise VectorError()
     
+    def __iadd__(self, v):
+        if self.shape() == v.shape():
+            for i in range(len(self)):
+                self.data[i] += v.data[i]
+            return Vector(*self)
+        else:
+            raise VectorError()
+    
     def __sub__(self, v):
         if self.shape() == v.shape():
             sub = [a - b for a, b in zip(self.data, v.data)]
             return Vector(*sub)
+        else:
+            raise VectorError()
+    
+    def __isub__(self, v):
+        if self.shape() == v.shape():
+            for i in range(len(self)):
+                self.data[i] -= v.data[i]
+            return Vector(*self)
         else:
             raise VectorError()
     
@@ -68,7 +84,10 @@ class Vector(object):
         return self.data[index]
     
     def __setitem__(self, index, val):
-        pass 
+        try:
+            self.data[index] = val  
+        except IndexError:
+            raise VectorError("Index out of range")
 
     def __eq__(self, v):
         return self.data == v.data 
@@ -93,4 +112,4 @@ class Vector(object):
         norm = self.norm()
         normed = [a/norm for a in self.data]
         return Vector(*normed) 
-
+    
